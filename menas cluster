@@ -1,0 +1,41 @@
+# Implement K-Means clustering/ hierarchical clustering on sales_data_sample.csv dataset.  
+# Determine the number of clusters using the elbow method.
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+____________________________________
+data = pd.read_csv("sales_data_sample.csv", encoding='Latin-1')
+data.head()
+
+# While utf-8 supports all languages according to pandas' documentation, utf-8 has a byte structure that must be respected at all times. Some of the values not included in utf-8 are latin small letters i with diaeresis, right-pointing double angle quotation mark, inverted question mark. This are mapped as 0xef, 0xbb and 0xbf bytes respectively. Hence your error.
+__________________________________________________
+
+data.shape
+-----------------------------------
+# Number of NAN values per column in the dataset
+data.isnull().sum()
+-----------------------------------
+data.drop(["ORDERNUMBER", "PRICEEACH", "ORDERDATE", "PHONE", "ADDRESSLINE1", "ADDRESSLINE2", "CITY", "STATE", "TERRITORY", "POSTALCODE", "CONTACTLASTNAME", "CONTACTFIRSTNAME"], axis = 1, inplace=True)
+_____________________________________________
+data.head()
+
+------------------------------------
+
+data.isnull().sum()
+-----------------------------------
+data.describe()
+
+------------------------------------
+
+sns.countplot(data = data , x = 'STATUS')
+_----------------------------------------------
+import seaborn as sns
+sns.histplot(x = 'SALES' , hue = 'PRODUCTLINE', data = data,
+             element="poly")
+-------------------------------------------
+
+data['PRODUCTLINE'].unique()
+___________________________________
