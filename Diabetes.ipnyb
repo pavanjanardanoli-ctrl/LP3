@@ -1,0 +1,38 @@
+%pip install scikit-learn
+
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import confusion_matrix,accuracy_score,precision_score,recall_score
+
+--------------------------------------------------------------------------------------------
+
+#load Dataset
+data=pd.read_csv('diabetes.csv')
+data.head()
+
+----------------------------------------------------------------------
+#load the Data 
+X = data.drop('Outcome', axis=1)
+Y = data['Outcome']
+----------------------------------------------------
+#Split the Dataset
+X_train,X_test,Y_train,Y_test=train_test_split(X,Y,test_size=0.2,random_state=42)
+____________________________---------------------------------
+
+#Knn Fit
+knn=KNeighborsClassifier(n_neighbors=5)
+knn.fit(X_train,Y_train)
+-------------------------------------------------------------
+
+#Predict
+Y_pred=knn.predict(X_test)
+
+--------------------------------------------------------------------
+
+#Evaluation
+print("Accuracy Score:",accuracy_score(Y_test,Y_pred))
+print("Precision_Score",precision_score(Y_test,Y_pred))
+print("recall_Score",recall_score(Y_test,Y_pred))
+print("confusion Matrix",confusion_matrix(Y_test,Y_pred))
