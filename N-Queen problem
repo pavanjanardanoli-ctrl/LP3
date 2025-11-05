@@ -1,0 +1,53 @@
+//DAA 5: n-Queens Problem 
+
+public class NQueens {
+    static int N = 4; // You can change this value
+
+    // Function to print the board
+    static void printBoard(int board[][]) {
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++)
+                System.out.print(board[i][j] + " ");
+            System.out.println();
+        }
+        System.out.println();
+    }
+
+    // Check if placing queen is safe
+    static boolean isSafe(int board[][], int row, int col) {
+        for (int i = 0; i < col; i++)
+            if (board[row][i] == 1) return false;
+
+        for (int i = row, j = col; i >= 0 && j >= 0; i--, j--)
+            if (board[i][j] == 1) return false;
+
+        for (int i = row, j = col; i < N && j >= 0; i++, j--)
+            if (board[i][j] == 1) return false;
+
+        return true;
+    }
+
+    // Solve using Backtracking
+    static boolean solveNQ(int board[][], int col) {
+        if (col == N) {
+            printBoard(board);
+            return true;
+        }
+
+        boolean res = false;
+        for (int i = 0; i < N; i++) {
+            if (isSafe(board, i, col)) {
+                board[i][col] = 1;
+                res = solveNQ(board, col + 1) || res;
+                board[i][col] = 0; // backtrack
+            }
+        }
+        return res;
+    }
+
+    public static void main(String[] args) {
+        int board[][] = new int[N][N];
+        if (!solveNQ(board, 0))
+            System.out.println("No Solution");
+    }
+}
