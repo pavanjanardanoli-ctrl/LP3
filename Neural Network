@@ -1,0 +1,43 @@
+# Bank Customer Churn Prediction using Neural Network
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+
+# Load dataset
+data = pd.read_csv("bank_churn.csv")
+
+# Features and target
+X = data.drop(columns=['CustomerId', 'Exited'])  # remove id, keep numeric cols
+y = data['Exited']
+
+# Split into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Feature scaling
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# Build neural network
+model = Sequential([
+    Dense(16, activation='relu', input_shape=(X_train.shape[1],)),
+    Dense(8, activation='relu'),
+    Dense(1, activation='sigmoid')  # binary output
+])
+
+# Compile model
+model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+
+# Train model
+model.fit(X_train, y_train, epochs=20, batch_size=16, verbose=1)
+
+# Evaluate
+loss, accuracy = model.evaluate(X_test, y_test)
+print(f"\n✅ Model Accuracy: {accuracy:.2f}")
+
+# Predict for one sample
+sample = X_test[0].reshape(1, -1)
+prediction = (model.predict(sample) > 0.5).astype("int32")
+print("Example Prediction (1=Will Leave, 0=Will Stay):", int(prediction))
